@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <div className="flex h-screen flex-col">
       <Header />
-      <main className="flex-1 wrap-anywhere">{children}</main>
+      <main className="flex-1 p-4 wrap-anywhere">{children}</main>
       <Footer />
     </div>
   );
