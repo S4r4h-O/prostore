@@ -1,7 +1,8 @@
+import { prisma } from "./prisma";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+dotenv.config({ path: ".env" });
 
 if (!process.env.DATABASE_URL) {
   console.error("DATABASE_URL not found");
@@ -9,13 +10,26 @@ if (!process.env.DATABASE_URL) {
 }
 
 async function main() {
-  const { prisma } = await import("./prisma");
   const { default: sampleData } = await import("./sample-data");
 
+  // Products
   await prisma.product.deleteMany();
   await prisma.product.createMany({ data: sampleData.products });
+
+  // Accounts
+  await prisma.account.deleteMany();
+
+  // Session
+  await prisma.session.deleteMany();
+
+  // Verification token
+  await prisma.verificationToken.deleteMany();
+
+  // Users
+  await prisma.user.deleteMany();
+  await prisma.user.createMany({ data: sampleData.users });
+
   console.log("Database seeded successfully");
-  console.log("Products count:", await prisma.product.count());
 }
 
 main().catch(console.error);
