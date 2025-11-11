@@ -9,3 +9,9 @@ export const LATEST_PRODUCT_LIMIT =
 export const getDatabaseUrl = () =>
   process.env.DATABASE_URL ||
   "postgresql://neondb_owner:npg_uKS3wprfg9Aj@ep-polished-firefly-acbj8ej1-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require";
+
+export const PAYMENT_METHODS = process.env.PAYMENT_METHOD
+  ? process.env.PAYMENT_METHOD.split(", ")
+  : ["PayPal", "Stripe", "CashOnDelivery"];
+export const DEFAULT_PAYMENT_METHOD =
+  process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
