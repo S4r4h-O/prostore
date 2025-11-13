@@ -148,3 +148,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* upload thing button text override */
+html.dark .uplad-field .text-white {
+  color: #ffffff !important;
+}
+
+.uplad-field .text-white {
+  color: #000 !important;
+}

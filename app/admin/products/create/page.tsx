@@ -1,0 +1,17 @@
+import ProductForm from "@/components/admin/product-form";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create product",
+};
+
+export default function CreateProductPage() {
+  return (
+    <>
+      <h2 className="font-bold text-xl">Create product</h2>
+      <div className="my-8">
+        <ProductForm type="Create" />
+      </div>
+    </>
+  );
+}

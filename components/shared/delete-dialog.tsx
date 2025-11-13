@@ -31,6 +31,7 @@ export default function DeleteDialog({
       if (!res.success) {
         toast.error(res.message);
       } else {
+        setOpen(false);
         toast.success(res.message);
       }
     });
