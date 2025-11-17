@@ -10,7 +10,7 @@ export default function CreateProductPage() {
     <>
       <h2 className="font-bold text-xl">Create product</h2>
       <div className="my-8">
-        <ProductForm type="Create" />
+        <ProductForm type="Create" />{" "}
       </div>
     </>
   );
