@@ -141,7 +141,7 @@ export async function getMyCart() {
     itemsPrice: cart.itemsPrice.toString(),
     totalPrice: cart.totalPrice.toString(),
     shippingPrice: cart.shippingPrice.toString(),
-    taxPrice: cart.taxPrice,
+    taxPrice: cart.taxPrice.toString(),
   });
 }
 

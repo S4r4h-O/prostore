@@ -69,7 +69,9 @@ export default async function AdminOrdersPage(props: {
                   {formatDateTime(order.createdAt).dateTime}
                 </TableCell>
                 <TableCell>{order.user.name}</TableCell>
-                <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
+                <TableCell>
+                  {formatCurrency(order.totalPrice.toString())}
+                </TableCell>
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime

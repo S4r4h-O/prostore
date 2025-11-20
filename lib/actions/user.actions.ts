@@ -73,7 +73,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       password: plainPassword,
     });
 
-    return { success: true, messsage: "User registered successfully" };
+    return { success: true, message: "User registered successfully" };
   } catch (err) {
     if (isRedirectError(err)) {
       throw err;

@@ -16,7 +16,13 @@ export async function getLatestProducts() {
     orderBy: { createdAt: "desc" },
   });
 
-  return convertToPlainObject(data);
+  return convertToPlainObject(
+    data.map((product) => ({
+      ...product,
+      price: product.price.toString(),
+      rating: product.rating.toString(),
+    })),
+  );
 }
 
 // Get a single product by it's slug
@@ -31,7 +37,13 @@ export async function getProductById(productId: string) {
     where: { id: productId },
   });
 
-  return convertToPlainObject(data);
+  if (!data) return null;
+
+  return convertToPlainObject({
+    ...data,
+    price: data.price.toString(),
+    rating: data.rating.toString(),
+  });
 }
 
 // Get all products
@@ -86,7 +98,6 @@ export async function getAllProducts({
           },
         }
       : {};
-
   const data = await prisma.product.findMany({
     where: {
       ...queryFilter,
@@ -106,10 +117,21 @@ export async function getAllProducts({
     take: limit,
   });
 
-  const dataCount = await prisma.product.count();
+  const dataCount = await prisma.product.count({
+    where: {
+      ...queryFilter,
+      ...categoryFilter,
+      ...priceFilter,
+      ...ratingFilter,
+    },
+  });
 
   return {
-    data,
+    data: data.map((product) => ({
+      ...product,
+      price: product.price.toString(),
+      rating: product.rating.toString(),
+    })),
     totalPages: Math.ceil(dataCount / limit),
   };
 }
@@ -190,5 +212,11 @@ export async function getFeaturedProducts() {
     take: 4,
   });
 
-  return convertToPlainObject(data);
+  return convertToPlainObject(
+    data.map((product) => ({
+      ...product,
+      price: product.price.toString(),
+      rating: product.rating.toString(),
+    })),
+  );
 }

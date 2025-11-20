@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import slugify from "slugify";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -21,7 +21,7 @@ import { UploadButton } from "@/lib/uploadthing";
 
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { productDefaultValues } from "@/lib/constants";
-import { insertProductSchema, updateProductSchema } from "@/lib/validators";
+import { insertProductSchema } from "@/lib/validators";
 import { Product } from "@/types";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
@@ -38,18 +38,34 @@ export default function ProductForm({
 }) {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof insertProductSchema>>({
-    resolver:
-      type === "Update"
-        ? zodResolver(updateProductSchema)
-        : zodResolver(insertProductSchema),
-    defaultValues:
-      product && type === "Update" ? product : productDefaultValues,
+  type ProductFormValues = z.infer<typeof insertProductSchema>;
+
+  const defaults: ProductFormValues =
+    product && type === "Update"
+      ? {
+          name: product.name,
+          slug: product.slug,
+          category: product.category,
+          brand: product.brand,
+          description: product.description,
+          stock: Number(product.stock),
+          price: product.price.toString(),
+          images: product.images,
+          isFeatured: product.isFeatured,
+          banner: product.banner ?? null,
+        }
+      : {
+          ...productDefaultValues,
+          stock: Number(productDefaultValues.stock),
+          price: productDefaultValues.price.toString(),
+        };
+
+  const form = useForm({
+    resolver: zodResolver(insertProductSchema),
+    defaultValues: defaults,
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof insertProductSchema>> = async (
-    values,
-  ) => {
+  const onSubmit: SubmitHandler<ProductFormValues> = async (values) => {
     // On create
     if (type === "Create") {
       const res = await createProduct(values);
@@ -58,9 +74,8 @@ export default function ProductForm({
         toast.error(res.message);
       } else {
         toast.success(res.message);
+        router.push("/admin/products");
       }
-
-      router.push("/admin/products");
     }
 
     // On update
@@ -75,9 +90,8 @@ export default function ProductForm({
         toast.error(res.message);
       } else {
         toast.success(res.message);
+        router.push("/admin/products");
       }
-
-      router.push("/admin/products");
     }
   };
 
@@ -184,7 +198,16 @@ export default function ProductForm({
               <FormItem className="w-full">
                 <FormLabel>Stock</FormLabel>
                 <FormControl>
-                  <Input placeholder="Stock" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="Stock"
+                    value={field.value as number}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
+                    disabled={field.disabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
