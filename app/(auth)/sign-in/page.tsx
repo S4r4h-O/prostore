@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import CredentialsSignInForm from "@/components/shared/auth/credentials-signin-form";
 import {
   Card,
@@ -10,7 +11,6 @@ import { APP_NAME } from "@/lib/constants";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -20,9 +20,10 @@ export const metadata: Metadata = {
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams?: { callbackUrl?: string };
+  searchParams?: Promise<{ callbackUrl?: string }>;
 }) {
-  const { callbackUrl } = searchParams?.callbackUrl || "/";
+  const sp = await searchParams;
+  const callbackUrl = sp?.callbackUrl || "/";
   const session = await auth();
 
   if (session) {

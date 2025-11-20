@@ -2,17 +2,19 @@ import { z } from "zod";
 
 import {
   cartItemSchema,
-  inserProductSchema,
+  insertProductSchema,
   insertCartSchema,
   insertOrderItemSchema,
   insertOrderSchema,
   paymentResultSchema,
   shippingAddressSchema,
+  insertReviewSchema,
 } from "@/lib/validators";
 
-export type Product = z.infer<typeof inserProductSchema> & {
+export type Product = z.infer<typeof insertProductSchema> & {
   id: string;
   rating: string;
+  numReviews: number;
   createdAt: Date;
 };
 
@@ -40,3 +42,9 @@ export type SalesDataType = {
   month: string;
   totalSales: number;
 }[];
+
+export type Review = z.infer<typeof insertReviewSchema> & {
+  id: string;
+  createdAt: Date;
+  user?: { name: string };
+};

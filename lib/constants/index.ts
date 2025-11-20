@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { insertReviewSchema } from "../validators";
+
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "E-commerce";
 export const APP_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION || "Modern E-commerce with NextsJs";
@@ -36,3 +39,11 @@ export const productDefaultValues = {
 export const USER_ROLES = process.env.USER_ROLES
   ? process.env.USER_ROLES.split(", ")
   : ["admin", "user"];
+
+export const reviewFOrmDefaultValues = {
+  title: "",
+  description: "",
+  rating: 1,
+  userId: "",
+  productId: "",
+} satisfies z.output<typeof insertReviewSchema>;
