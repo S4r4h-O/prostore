@@ -27,6 +27,7 @@ import {
   updateOrderToPaidCOD,
   deliveredOrder,
 } from "@/lib/actions/order.actions";
+import StripePayment from "./stripe-payment";
 
 const OrderDetailsTable = ({
   order,
@@ -243,6 +244,15 @@ const OrderDetailsTable = ({
                     />
                   </PayPalScriptProvider>
                 </div>
+              )}
+
+              {/* stripe payment */}
+              {!isPaid && paymentMethod === "Stripe" && stripeClientSecret && (
+                <StripePayment
+                  priceInCents={Number(order.totalPrice) * 100}
+                  orderId={order.id}
+                  clientSecret={stripeClientSecret}
+                />
               )}
 
               {/* Cash on delivery */}
