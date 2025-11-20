@@ -47,3 +47,5 @@ export const reviewFOrmDefaultValues = {
   userId: "",
   productId: "",
 } satisfies z.output<typeof insertReviewSchema>;
+
+export const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";

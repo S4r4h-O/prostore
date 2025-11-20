@@ -11,8 +11,14 @@ import { auth } from "@/auth";
 import { getMyCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
 import { insertOrderSchema } from "../validators";
-import { CartItem, PaymentResult, SalesDataType } from "@/types";
+import {
+  CartItem,
+  PaymentResult,
+  SalesDataType,
+  ShippingAddress,
+} from "@/types";
 import { PAGE_SIZE } from "../constants";
+import { sendPurchaseReceipt } from "@/email";
 
 // Create order and order items
 export async function createOrder() {
@@ -272,6 +278,14 @@ export async function updateOrderToPaid({
   });
 
   if (!updatedOrder) throw new Error("Order not found");
+
+  sendPurchaseReceipt({
+    order: {
+      ...updatedOrder,
+      shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+      paymentResult: updatedOrder.paymentResult as PaymentResult,
+    },
+  });
 }
 
 // Get the user's orders
